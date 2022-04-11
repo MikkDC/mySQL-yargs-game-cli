@@ -1,35 +1,23 @@
-const sequelize = require("./connection");
+const sequelize = require("../connection");
 const { DataTypes } = require("sequelize");
 
 const Game = sequelize.define("game", {
-    title: {
-        type: DataTypes.STRING,
-        allowNull: false
-        }
-    },
-);
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+});
 
 const Developer = sequelize.define("developer", {
-    developer: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: "Not given"
-        }
-    },
-);
+  developer: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+});
 
-const Year = sequelize.define("year", {
-    year: {
-        type: DataTypes.INTEGER,
-        allowNull: true
-        }
-    },
-);
+Game.belongsTo(Developer, { constraints: false });
+Developer.hasMany(Game, { constraints: false });
 
-Developer.hasMany(Game);
-Game.belongsTo(Developer);
-
-Year.hasMany(Game);
-Game.belongsTo(Year);
-
-module.exports = { Game, Developer, Year};
+module.exports = { Game, Developer };
